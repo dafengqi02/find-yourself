@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>寻找自己</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="splash-screen" aria-hidden="true">
+      <div class="splash-copy">
+        <p>这个世界一直教你看别人。</p>
+        <strong>而这里，帮你看见自己。</strong>
+        <blockquote class="splash-quote">
+          <p id="splashQuoteText"></p>
+          <cite id="splashQuoteSource"></cite>
+        </blockquote>
+      </div>
+    </div>
+
+    <main class="app-shell">
+      <header class="brand-top">
+        <div class="brand-mark" aria-hidden="true">寻</div>
+        <strong>寻找自己</strong>
+        <div class="theme-switcher" role="group" aria-label="页面配色">
+          <button class="theme-button active" type="button" data-theme="day">白天</button>
+          <button class="theme-button" type="button" data-theme="night">深夜</button>
+          <button class="theme-button" type="button" data-theme="morandi">莫兰迪</button>
+        </div>
+      </header>
+
+      <nav class="tabs floating-tabs" aria-label="视图切换">
+        <button class="tab-button active" type="button" data-view="record">记录</button>
+        <button class="tab-button" type="button" data-view="talent">线索</button>
+        <button class="tab-button" type="button" data-view="review">回顾</button>
+        <button class="tab-button" type="button" data-view="history">原始记录</button>
+      </nav>
+
+      <section class="workspace">
+        <section class="view active" id="recordView">
+          <header class="hero">
+            <p>慢慢说，我在听。</p>
+            <h2>现在，什么事情最让你有感觉？</h2>
+          </header>
+
+          <section class="record-panel" aria-label="今日记录">
+            <div class="record-heading">
+              <div>
+                <p class="record-emotions">无论是开心、失望、愤怒、平静还是感动。</p>
+                <h3>想到什么就说什么。</h3>
+                <p class="record-purpose">剩下的交给我。</p>
+              </div>
+              <div class="record-meta">
+                <div class="compact-clock" aria-label="当前日期和时间">
+                  <span id="clockDate"></span>
+                  <span id="clockWeekday"></span>
+                  <span class="compact-time" id="clockTime">00:00</span>
+                </div>
+              </div>
+            </div>
+
+            <textarea
+              id="entryText"
+              rows="7"
+              placeholder="太累啦，不想打字？也可以用语音识别哦。&#10;&#10;例如：晚上打篮球时，我发现自己的控球比以前更稳了。那一刻很开心，也觉得最近的练习没有白费。"
+            ></textarea>
+
+            <div class="record-actions">
+              <button class="voice-button" id="voiceBtn" type="button" aria-label="开始语音记录">
+                <span aria-hidden="true">🎤</span>
+                <strong>说说今天吧</strong>
+              </button>
+              <button class="primary-button" id="saveBtn" type="button">帮我整理</button>
+            </div>
+          </section>
+
+          <section class="result-panel" id="resultPanel" aria-live="polite">
+            <div class="empty-state">
+              <strong>你说完之后，我会提炼出有用的部分。</strong>
+              <p>不是评价你，而是把事件、价值、能量和可能的特长线索留下来。</p>
+            </div>
+          </section>
+
+          <section class="emotion-dialogue" id="emotionDialogue" hidden aria-live="polite">
+            <header class="dialogue-head">
+              <div>
+                <p class="kicker">我们先不急着总结</p>
+                <h3>我想再听你说一点。</h3>
+              </div>
+              <button class="dialogue-close" id="dialogueCloseBtn" type="button" aria-label="结束这次对话">×</button>
+            </header>
+            <div class="dialogue-messages" id="dialogueMessages"></div>
+            <div class="dialogue-choices" id="dialogueChoices"></div>
+            <form class="dialogue-form" id="dialogueForm">
+              <textarea id="dialogueInput" rows="3" placeholder="不用组织语言，想到什么就说什么。"></textarea>
+              <button class="primary-button" type="submit">继续说</button>
+            </form>
+            <p class="dialogue-safety">这里帮助你梳理感受，不替代专业的心理或医疗支持。</p>
+          </section>
+        </section>
+
+        <section class="view" id="talentView">
+          <header class="section-head">
+            <p class="kicker">证据与线索</p>
+            <h2>不急着定义你，只把反复出现的事放在一起。</h2>
+          </header>
+
+          <section class="bubble-field" id="talentBubbles"></section>
+
+          <section class="content-band">
+            <div class="band-heading">
+              <h3 id="talentTitle">点一个线索，看看有哪些具体证据</h3>
+              <span id="talentHint">结论永远比证据出现得晚</span>
+            </div>
+            <div class="evidence-list" id="talentEvidence">
+              <p class="empty-state">当你记录了几件事之后，这里会把相似的行为证据慢慢放在一起。</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="reviewView">
+          <header class="section-head">
+            <p class="kicker">被看见系统</p>
+            <h2>难过的时候，先回头看看事实。</h2>
+          </header>
+
+          <section class="review-panel">
+            <div>
+              <h3>随机跳出一组自己的事迹。</h3>
+              <p>不是安慰你，而是提醒你：数据里的你，不只有此刻的低谷。</p>
+            </div>
+            <button class="primary-button" id="reviewBtn" type="button">回顾一下</button>
+          </section>
+
+          <section class="review-list" id="reviewList">
+            <p class="empty-state">点击回顾，会从你的记录里随机挑出一组具体事迹。</p>
+          </section>
+        </section>
+
+        <section class="view" id="historyView">
+          <header class="section-head">
+            <p class="kicker">未经改写的你</p>
+            <h2>原始记录</h2>
+          </header>
+
+          <section class="history-dock" id="historyDock">
+            <div class="dock-head">
+              <input id="searchInput" placeholder="搜索原文、事件或线索" />
+              <div class="data-actions">
+                <button class="secondary-button" id="exportBtn" type="button">导出</button>
+                <button class="ghost-button" id="clearBtn" type="button">清空</button>
+              </div>
+            </div>
+            <div class="entry-list" id="historyEntries"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <template id="resultTemplate">
+      <article class="chat-exchange">
+        <div class="chat-row user-row">
+          <div class="chat-bubble user-bubble" data-field="heard"></div>
+        </div>
+        <div class="chat-row assistant-row">
+          <div class="assistant-avatar" aria-hidden="true">寻</div>
+          <div class="chat-bubble assistant-bubble">
+            <section>
+              <span>我听见了</span>
+              <p data-field="value"></p>
+            </section>
+            <section>
+              <span>可以继续观察的线索</span>
+              <p data-field="talent"></p>
+            </section>
+            <section>
+              <span>可以带走的一句话</span>
+              <p data-field="feedback"></p>
+            </section>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="entryTemplate">
+      <article class="entry-item">
+        <div>
+          <div class="entry-meta"></div>
+          <p></p>
+          <div class="entry-tags"></div>
+        </div>
+        <button class="star-button" type="button" title="收藏这条事迹" aria-label="收藏这条事迹">☆</button>
+      </article>
+    </template>
+
+    <template id="evidenceTemplate">
+      <article class="evidence-card">
+        <header>
+          <div>
+            <span class="evidence-time"></span>
+            <h4 class="evidence-action"></h4>
+          </div>
+          <button class="star-button" type="button" title="这条治愈到了我" aria-label="这条治愈到了我">☆</button>
+        </header>
+        <dl class="evidence-breakdown">
+          <div>
+            <dt>可以继续观察的方向</dt>
+            <dd class="evidence-ability"></dd>
+          </div>
+          <div>
+            <dt>记录时可能的状态</dt>
+            <dd class="evidence-state"></dd>
+          </div>
+          <div>
+            <dt>拆解后的线索</dt>
+            <dd class="evidence-clues"></dd>
+          </div>
+        </dl>
+        <button class="original-toggle" type="button" aria-expanded="false">展示当时的完整原文</button>
+        <blockquote class="original-text" hidden></blockquote>
+      </article>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>

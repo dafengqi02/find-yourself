@@ -1,0 +1,8 @@
+﻿__pycache__/
+*.py[cod]
+*.db
+.env
+.env.*
+!.env.example
+*.bat
+!启动寻找自己.bat
