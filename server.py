@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = ROOT / "find-yourself.db"
+STORAGE_MODE = os.environ.get("STORAGE_MODE", "database")
 
 
 def connect():
@@ -42,6 +43,9 @@ class FindYourselfHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/state":
+            if STORAGE_MODE == "browser":
+                self.send_error(404)
+                return
             with connect() as db:
                 row = db.execute("SELECT data FROM app_state WHERE id = 1").fetchone()
             self.send_json(normalize_state(json.loads(row["data"])))
@@ -58,6 +62,9 @@ class FindYourselfHandler(SimpleHTTPRequestHandler):
             return
 
         if self.path != "/api/state":
+            self.send_error(404)
+            return
+        if STORAGE_MODE == "browser":
             self.send_error(404)
             return
 
@@ -427,8 +434,11 @@ def top_items(items, limit):
 
 
 if __name__ == "__main__":
-    init_db()
-    server = ThreadingHTTPServer(("127.0.0.1", 5180), FindYourselfHandler)
-    print("寻找自己 server: http://127.0.0.1:5180/")
-    print(f"Database file: {DB_PATH}")
+    if STORAGE_MODE != "browser":
+        init_db()
+    host = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", "5180"))
+    server = ThreadingHTTPServer((host, port), FindYourselfHandler)
+    print(f"寻找自己 server: http://{host}:{port}/")
+    print(f"Storage mode: {STORAGE_MODE}")
     server.serve_forever()

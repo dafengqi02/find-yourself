@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: find-yourself
+    runtime: python
+    plan: free
+    buildCommand: ""
+    startCommand: python server.py
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: STORAGE_MODE
+        value: browser
+      - key: OPENAI_API_KEY
+        sync: false
